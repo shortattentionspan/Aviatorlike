@@ -680,12 +680,6 @@ function drawBattery(dc) {
        	if (StepProgressEnable) {
 			drawStepGoal(dc);
 		}
-		//! Markers for sunrire and sunset
-		var SunmarkersEnable = (App.getApp().getProperty("SunMarkersEnable"));		
-       	if (SunmarkersEnable && screenShape == 1) {
-       		//Sys.println("sunmarkers "+ SunmarkersEnable);
-			extras.drawSunMarkers(dc);
-		}
 		//! Alm / Msg indicators
 		var AlmMsgEnable = (App.getApp().getProperty("AlmMsgEnable"));
 		var ShowAlmMsgCount = (App.getApp().getProperty("ShowAlmMsgCount"));
@@ -922,7 +916,13 @@ function drawBattery(dc) {
 	        		dc.drawText(16, (height / 2) - 17, Gfx.FONT_SYSTEM_LARGE   , leftNum, Gfx.TEXT_JUSTIFY_LEFT);
 		   		}
 	   	} 
-       
+	   	
+		//! Markers for sunrire and sunset
+		var SunmarkersEnable = (App.getApp().getProperty("SunMarkersEnable"));		
+       	if (SunmarkersEnable && screenShape == 1) {
+       		//Sys.println("sunmarkers "+ SunmarkersEnable);
+			extras.drawSunMarkers(dc);
+		}       
 
   // Draw hands ------------------------------------------------------------------         
      	hands.drawHands(dc); 
