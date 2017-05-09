@@ -36,9 +36,10 @@ module extras{
 			
 			var sunriseTinfo = Time.Gregorian.info(new Time.Moment(sunrise_moment.value() + 30), Time.FORMAT_SHORT);
 			var sunsetTinfo = Time.Gregorian.info(new Time.Moment(sunset_moment.value() + 30), Time.FORMAT_SHORT);
+			var reverseMultiplier= App.getApp().getProperty("Reverse") ? -1 : 1 ;
    	       
-    		alphaSunrise = Math.PI/6*(1.0*sunriseTinfo.hour+sunriseTinfo.min/60.0);
-    		alphaSunset = Math.PI/6*(1.0*sunsetTinfo.hour+sunsetTinfo.min/60.0);
+    		alphaSunrise = reverseMultiplier*Math.PI/6*(1.0*sunriseTinfo.hour+sunriseTinfo.min/60.0);
+    		alphaSunset = reverseMultiplier*Math.PI/6*(1.0*sunsetTinfo.hour+sunsetTinfo.min/60.0);
       
         	var r1, r2;      	
         	var outerRad = 0;
@@ -58,7 +59,8 @@ module extras{
 			dc.drawCircle(center_x+(r1-15)*Math.sin(alphaSunrise),center_y-(r1-15)*Math.cos(alphaSunrise),6);			
 			dc.drawCircle(center_x+(r1-5)*Math.sin(alphaSunset),center_y-(r1-5)*Math.cos(alphaSunset),6);
 			
-			dc.setColor(Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);	
+			//dc.setColor(Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
+			dc.setColor(0xFFFF00, Gfx.COLOR_TRANSPARENT);	
 			dc.fillCircle(center_x+(r1-15)*Math.sin(alphaSunrise),center_y-(r1-15)*Math.cos(alphaSunrise),5);	
 			dc.setColor(Gfx.COLOR_DK_BLUE, Gfx.COLOR_TRANSPARENT);
 			dc.fillCircle(center_x+(r1-5)*Math.sin(alphaSunset),center_y-(r1-5)*Math.cos(alphaSunset),5); 			      
