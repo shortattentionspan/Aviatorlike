@@ -61,14 +61,46 @@ class AviatorlikeView extends Ui.WatchFace{
 	
 		var moonx, moony, moonwidth;
 		
-		var BatteryIcon="0";
-		var AlarmIcon="1";
-		var PhoneIcon="2";
-		var MoonIcon="3";
-		var MessageIcon="4";
-		var ConnectedPhoneIcon="C";
-		var DisconnectedPhoneIcon="D";
+		const BatteryIcon="0";
+		const AlarmIcon="1";
+		const PhoneIcon="2";
+		const MoonIcon="3";
+		const MessageIcon="4";
+		const ConnectedPhoneIcon="C";
+		const DisconnectedPhoneIcon="D";
+		const ShoesFilledIcon="S";
+		const ShoesOutlineIcon="s";
 		
+		const RoundScreen=1;
+		const SemiRoundScreen=2;
+		
+		const AlternateYellow = 0xFFFF00;
+		
+		enum {
+			NoNumbers,
+			Fat12Numbers,
+			FatNumbers,
+			RaceNumbers,
+			ClassicNumbers,
+			RomanNumbers,
+			SimpleNumbers
+		}
+		
+		enum {
+			DisplayNone,
+			DisplayDate,
+			DisplaySteps,
+			DisplayStepstogo,
+			DisplayStepGraph,
+			DisplayDigitalClock,
+			DisplayAltitude,
+			DisplayCalories,
+			DisplayDistance,
+			DisplayBattery,
+			DisplayDayWeek,
+			DisplaySunsetRise,
+			DisplayHR
+		}
 		
 		
     function initialize() {
@@ -263,7 +295,7 @@ class AviatorlikeView extends Ui.WatchFace{
      		}
         
         	//alle 5 minutes
-            dc.setPenWidth(3);
+            //dc.setPenWidth(3);  //redundant
             dc.setColor(App.getApp().getProperty("QuarterNumbersColor"), Gfx.COLOR_TRANSPARENT);
            	//r1 = width/2 -20; //inside
            	r1 = width/2 - (5 * App.getApp().getProperty("markslenth"));
@@ -285,44 +317,55 @@ class AviatorlikeView extends Ui.WatchFace{
       
       
       
-       if ( NbrFont == 0 || NbrFont == 1) { //no number	  		
+       if ( NbrFont == NoNumbers || NbrFont == Fat12Numbers) { //no number	  		
 			var n;      
-        	var r1, r2,  thicknes;      	
+        	var r1, r2,  thicknes=0.1;      	
         	var outerRad = 0;
         	var lenth=20;
-        	if (screenShape == 1) {  //semi round 
+        	if (screenShape == RoundScreen) {  //round 
         		lenth = 20;
         	}
-        	if (screenShape == 2) {  //semi round 
+        	if (screenShape == SemiRoundScreen) {  //semi round 
         		lenth = 30;
         	}	
         	
-        	var thick = 5;
-        	thicknes = thick * 0.02;
+        	//var thick = 5;
+        	//thicknes = thick * 0.02;  //radians
         	
         	//when moon then only three marks
         	var nurdrei = 0;
         	var alphaMax = 4;
         	var MoonEnable = (App.getApp().getProperty("MoonEnable"));
-				if (MoonEnable && NbrFont == 0) {
+				/*if (MoonEnable && NbrFont == NoNumbers) {
         			nurdrei = (Math.PI / 2) ;
         			alphaMax = 4;
         		}
-        		if (MoonEnable && NbrFont == 1) {
+        		if (MoonEnable && NbrFont == Fat12Numbers) {
         			nurdrei = (Math.PI / 2) ;
         			alphaMax = 3;
         		}
-        		if (MoonEnable == false && NbrFont == 0) {
+        		if (MoonEnable == false && NbrFont == NoNumbers) {
         			nurdrei = 0;
         			alphaMax = 4;
         		}
-        		if (MoonEnable == false && NbrFont == 1) {
+        		if (MoonEnable == false && NbrFont == Fat12Numbers) {
         			nurdrei = 0 ;
         			alphaMax = 3;
-        		}
+        		}*/
+/*        	if (MoonEnable) {
+        		nurdrei = (Math.PI / 2) ;
+        	}
+*/        	if (NbrFont == Fat12Numbers) {
+        		alphaMax = 3;
+        	}
         		      	
-           	for (var alpha = (Math.PI / 2) + nurdrei ; alpha <= alphaMax * Math.PI / 2; alpha += (Math.PI / 2)) { //jede 15. Minute    
+//           	for (var alpha = (Math.PI / 2) + nurdrei ; alpha <= alphaMax * Math.PI / 2; alpha += (Math.PI / 2)) { //jede 15. Minute    
+           	for (var alpha = alphaMax * Math.PI / 2; alpha > 0 ; alpha -= (Math.PI / 2)) { //jede 15. Minute    
 				r1 = (width/2 + 3) - outerRad; //outside
+				if (MoonEnable && (alpha<(Math.PI)-0.1)) {
+					lenth = 13;
+				}
+				
 				r2 = r1 -lenth; //inside			
 							
 			var marks = [[center_x+r1*Math.sin(alpha-thicknes),center_y-r1*Math.cos(alpha-thicknes)],
@@ -491,14 +534,15 @@ function drawBattery(dc) {
         var alpha, hand;
         alpha = 0; 
         
-        if (screenShape == 1) {  //round 
+        if (screenShape == RoundScreen) {  //round 
         alpha = App.getApp().getProperty("Reverse") ? -1 * 2*Math.PI/100*(Battery) : 2*Math.PI/100*(Battery); 
 		}		
-		if (screenShape == 2) {  //semi round
+		if (screenShape == SemiRoundScreen) {  //semi round
         alpha = (Math.PI-1)/100*(Battery)+Math.PI+0.5;
 		}
         if (Battery >= 25) {
-        dc.setColor(Gfx.COLOR_ORANGE, Gfx.COLOR_TRANSPARENT);
+        //dc.setColor(Gfx.COLOR_ORANGE, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(AlternateYellow, Gfx.COLOR_TRANSPARENT);
         }
         if (Battery < 25) {
         dc.setColor(Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
@@ -514,7 +558,14 @@ function drawBattery(dc) {
 			r1 = width/2 - outerRad; //outside
 			r2 = r1 -lenth; ////Länge des Bat-Zeigers
 										
-			//if (!App.getApp().getProperty("UseIcons")){
+			if (App.getApp().getProperty("UseIcons")){
+				dc.fillRectangle(center_x+r2*Math.sin(alpha)-10,center_y-r2*Math.cos(alpha) - 4,18,10);
+				dc.setColor(App.getApp().getProperty("HandsOutlineColor"), Gfx.COLOR_TRANSPARENT);
+				//dc.setPenWidth(1);
+				//dc.drawRectangle(center_x+r2*Math.sin(alpha)-10,center_y-r2*Math.cos(alpha) - 4,18,10);
+				dc.drawText(center_x+r2*Math.sin(alpha),center_y-r2*Math.cos(alpha) - 6, fontIcons, BatteryIcon, Gfx.TEXT_JUSTIFY_CENTER);  //battery icon
+			}
+			else {
 				hand =     [[center_x+r1*Math.sin(alpha+0.1),center_y-r1*Math.cos(alpha+0.1)],
 						[center_x+r2*Math.sin(alpha),center_y-r2*Math.cos(alpha)],
 						[center_x+r1*Math.sin(alpha-0.1),center_y-r1*Math.cos(alpha-0.1)]   ];
@@ -526,10 +577,8 @@ function drawBattery(dc) {
 					dc.drawLine(hand[n][0], hand[n][1], hand[n+1][0], hand[n+1][1]);
 				}
 				dc.drawLine(hand[n][0], hand[n][1], hand[0][0], hand[0][1]);			
-			//} else {
-				//Draw a battery icon that rotates around the dial?			
-											
-
+			}
+			
 	}
 	
 	
@@ -560,7 +609,7 @@ function drawBattery(dc) {
        		dc.setColor(Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);
        	}
        	if (stepPercent < 29) {
-       		dc.setColor(Gfx.COLOR_ORANGE , Gfx.COLOR_TRANSPARENT);
+       		dc.setColor(AlternateYellow , Gfx.COLOR_TRANSPARENT);
        	}
        	if (stepPercent < 5) {
        		dc.setColor(Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
@@ -571,10 +620,10 @@ function drawBattery(dc) {
         var alpha, hand;
         alpha = 0; 
         
-        if (screenShape == 1) {  //1=round 
+        if (screenShape == RoundScreen) {  //1=round 
         alpha = App.getApp().getProperty("Reverse") ? -1 * 2*Math.PI/100*(stepPercent) : 2*Math.PI/100*(stepPercent);
 		}		
-		if (screenShape == 2) {  //2=semi round
+		if (screenShape == SemiRoundScreen) {  //2=semi round
         //alpha = (Math.PI-1)/100*(Battery)+Math.PI+0.5;
         alpha = (Math.PI-0.5)-(Math.PI-1)/100*(stepPercent);
 		}
@@ -587,20 +636,27 @@ function drawBattery(dc) {
 			r1 = width/2 - outerRad; //outside
 			r2 = r1 -lenth; ////Länge des Step-Zeigers
 										
-			hand =     [[center_x+r2*Math.sin(alpha+0.1),center_y-r2*Math.cos(alpha+0.1)],
+       if (stepPercent < 100) {       
+			if (App.getApp().getProperty("UseIcons")) {
+				dc.drawText(center_x+(r1-13)*Math.sin(alpha),center_y-(r1-13)*Math.cos(alpha) - 9, fontIcons, ShoesFilledIcon, Gfx.TEXT_JUSTIFY_CENTER);
+				dc.setColor(App.getApp().getProperty("HandsOutlineColor"), Gfx.COLOR_TRANSPARENT);
+				dc.drawText(center_x+(r1-13)*Math.sin(alpha),center_y-(r1-13)*Math.cos(alpha) - 9, fontIcons, ShoesOutlineIcon, Gfx.TEXT_JUSTIFY_CENTER);
+			
+			}
+			else {		
+				hand =     [[center_x+r2*Math.sin(alpha+0.1),center_y-r2*Math.cos(alpha+0.1)],
 						[center_x+r1*Math.sin(alpha),center_y-r1*Math.cos(alpha)],
 						[center_x+r2*Math.sin(alpha-0.1),center_y-r2*Math.cos(alpha-0.1)]   ];					
 		
-       if (stepPercent < 100) {       
-					
-			dc.fillPolygon(hand);			
-			dc.setColor(App.getApp().getProperty("QuarterNumbersColor"), Gfx.COLOR_TRANSPARENT);
-	        dc.setPenWidth(1);
-	        var n;
-			for (n=0; n<2; n++) {
-				dc.drawLine(hand[n][0], hand[n][1], hand[n+1][0], hand[n+1][1]);
+				dc.fillPolygon(hand);			
+				dc.setColor(App.getApp().getProperty("QuarterNumbersColor"), Gfx.COLOR_TRANSPARENT);
+	        	dc.setPenWidth(1);
+	        	var n;
+				for (n=0; n<2; n++) {
+					dc.drawLine(hand[n][0], hand[n][1], hand[n+1][0], hand[n+1][1]);
+				}
+				dc.drawLine(hand[n][0], hand[n][1], hand[0][0], hand[0][1]);
 			}
-			dc.drawLine(hand[n][0], hand[n][1], hand[0][0], hand[0][1]);
 		}
 		
  	}
@@ -742,22 +798,25 @@ function drawBattery(dc) {
 			labelText = "";
   			labelInfoText = "";	        
     		     	    	
+			if (displayInfo == DisplayNone) {
+				return;
+			}
 	 		//Draw date---------------------------------
-		   	if (displayInfo == 1) {
+		   	if (displayInfo == DisplayDate) {
 		   		date.buildDateString();
 		   		labelText = date.dateStr;	  		      
 		   		return;
 			}	
 	
 	 	    //Draw Steps --------------------------------------
-	      	if (displayInfo == 2) {				   		
+	      	if (displayInfo == DisplaySteps) {				   		
 		   		labelText = Lang.format("$1$", [ActMonitor.getInfo().steps]);
 	  			labelInfoText = Lang.format("$1$", [ActMonitor.getInfo().stepGoal]);   						
 	  			return;
 			}
 			
 			//Draw Steps to go --------------------------------------
-	      	if (displayInfo == 3) {
+	      	if (displayInfo == DisplayStepstogo) {
 	        var actsteps = 0;
 	        var stepGoal = 0;
 	        var stepstogo = 0;		
@@ -776,7 +835,7 @@ function drawBattery(dc) {
 			}
 
 	 	    //Draw StepGraph --------------------------------------
-	      	if (displayInfo == 4) {				   		
+	      	if (displayInfo == DisplayStepGraph) {				   		
 		   		labelText = "";
 	  			labelInfoText = Lang.format("$1$", [ActMonitor.getInfo().stepGoal]); 	  						
 	  			return;
@@ -784,19 +843,19 @@ function drawBattery(dc) {
 
 
 	 		//Draw DigitalTime---------------------------------
-		   	if (displayInfo == 5) {
+		   	if (displayInfo == DisplayDigitalClock) {
 				 drawDigitalTime(); 
 				 return;
 			}	         
 	        
 	    	// Draw Altitude------------------------------
-			if (displayInfo == 6) {
+			if (displayInfo == DisplayAltitude) {
 				drawAltitude();	
 				return;
 			 }	
 				
 			// Draw Calories------------------------------
-			if (displayInfo == 7) {	
+			if (displayInfo == DisplayCalories) {	
 				var actInfo = ActMonitor.getInfo(); 
 		        var actcals = actInfo.calories;		       
 		        labelText = Lang.format("$1$", [actcals]);
@@ -805,7 +864,7 @@ function drawBattery(dc) {
 			}
 			
 			//Draw distance
-			if (displayInfo == 8) {
+			if (displayInfo == DisplayDistance) {
 				distance.drawDistance();
 				labelText = distance.distStr;
 	  			labelInfoText = distance.distUnit;
@@ -814,14 +873,14 @@ function drawBattery(dc) {
 			}			
 			
 			//Draw battery
-			if (displayInfo == 9) {
+			if (displayInfo == DisplayBattery) {
 				var Battery = Toybox.System.getSystemStats().battery;       
         	    labelText = Lang.format("$1$ % ", [ Battery.format ( "%2d" ) ] );
         	    return;
 			}
 			
 			//Draw Day and week of year
-			if (displayInfo == 10) {
+			if (displayInfo == DisplayDayWeek) {
 				date.builddayWeekStr();
 				//labelText = date.dayWeekStr;
 				labelText = date.aktDay + " / " + date.week;
@@ -829,32 +888,40 @@ function drawBattery(dc) {
 			}
 			
 			//next / over next sun event
-			if (displayInfo == 11) {
+			if (displayInfo == DisplaySunsetRise) {
 				buildSunsetStr();
 				return;
 		    }
 		    
 		   	//heart rate
-			if (displayInfo == 12) {
-			var hasHR = (ActivityMonitor has :HeartRateIterator) ? true : false;			
-				if (hasHR) {
-					var HRH = ActMonitor.getHeartRateHistory(null, true);
-					var hr="--";
-					
-					if(HRH != null) {
-						var HRS=HRH.next();
-						if(HRS!=null && HRS.heartRate!=null && HRS.heartRate!=ActMonitor.INVALID_HR_SAMPLE) {
-							hr = HRS.heartRate.toString();
-							labelText = hr;
-							labelInfoText = "bpm";
-							//labelText = HRH.getMax()+"/"+HRH.getMin()+" "+HRS.heartRate+" bpm";			
-						}
-					}	
+			if (displayInfo == DisplayHR) {
+				if (Act.Info has :currentHeartRate) {
+					labelText = Act.getActivityInfo().currentHeartRate.toString();
+					labelInfoText = "bpm";
 				}
-				else {
-				labelText = "no sensor";
-				}				
-				return;
+				else
+				{
+			
+					var hasHR = (ActivityMonitor has :HeartRateIterator) ? true : false;			
+					if (hasHR) {
+						var HRH = ActMonitor.getHeartRateHistory(null, true);
+						var hr="--";
+					
+						if(HRH != null) {
+							var HRS=HRH.next();
+							if(HRS!=null && HRS.heartRate!=null && HRS.heartRate!=ActMonitor.INVALID_HR_SAMPLE) {
+								hr = HRS.heartRate.toString();
+								labelText = hr;
+									labelInfoText = "bpm";
+								//labelText = HRH.getMax()+"/"+HRH.getMin()+" "+HRS.heartRate+" bpm";			
+							}
+						}	
+					}
+					else {
+					labelText = "no sensor";
+					}				
+				}
+			return;
 		    }
 		   		    	    
 		    
@@ -946,23 +1013,6 @@ function drawBattery(dc) {
 			//dc.drawText(moonx+moonwidth/2,moony+moonwidth/2, fontLabel, moon.c_phase, Gfx.TEXT_JUSTIFY_CENTER);
 		} 
 */	
-		//!progress battery------------
-		var BatProgressEnable = (App.getApp().getProperty("BatProgressEnable"));
-       	if (BatProgressEnable) {
-			drawBattery(targetDc);
-		}
-		//!progress steps--------------
-		var StepProgressEnable = (App.getApp().getProperty("StepProgressEnable"));
-       	if (StepProgressEnable) {
-			drawStepGoal(targetDc);
-		}
-		//! Markers for sunrise and sunset
-		var SunmarkersEnable = (App.getApp().getProperty("SunMarkersEnable"));		
-       	if (SunmarkersEnable && screenShape == 1) {
-       		//Sys.println("sunmarkers "+ SunmarkersEnable);
-			extras.drawSunMarkers(targetDc);
-		}
-		
 //		drawBackground(dc); 
 		
 		
@@ -991,24 +1041,28 @@ function drawBattery(dc) {
        var font1 = 0;  
        var rightNum="3";
        var leftNum="9";
-       var twelveNum;
-       var iconDrop = 20;
+       var twelveNum=0;
+       var iconDrop = 19;
        //var twelveFont;
        
 		if (App.getApp().getProperty("ConnectionIndicator") < 2){
-			twelveNum=0;
+			//twelveNum=0;
 		} else {
 			if (Sys.getDeviceSettings().phoneConnected) {
 				if ((App.getApp().getProperty("ConnectionIndicator") % 2) == 0) {
 					twelveNum = ConnectedPhoneIcon;
+					targetDc.setColor((App.getApp().getProperty("ConnectedColor")), Gfx.COLOR_TRANSPARENT);
 				} else {
-					twelveNum = 0;
+					//twelveNum = 0;
+					//targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
 				}
 			} else {
 				if (App.getApp().getProperty("ConnectionIndicator") > 2) {
 					twelveNum= DisconnectedPhoneIcon;
+					targetDc.setColor((App.getApp().getProperty("DisconnectedColor")), Gfx.COLOR_TRANSPARENT);
 				} else {
-					twelveNum= 0;
+					//twelveNum= 0;
+					//targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
 				}
 			}
 		}
@@ -1021,8 +1075,8 @@ function drawBattery(dc) {
        	leftNum="3";
        	}
        
-       if (screenShape == 1) {  // round
-   		    if ( NbrFont == 1) { //fat 12 only
+       if (screenShape == RoundScreen) {  // round
+   		    if ( NbrFont == Fat12Numbers) { //fat 12 only
 	    		font1 = Ui.loadResource(Rez.Fonts.id_font_fat);
 	    		if (twelveNum == 0) {
 					targetDc.drawText((width / 2), 5, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
@@ -1031,65 +1085,70 @@ function drawBattery(dc) {
 				}
 			
 	    	}            
-		    if ( NbrFont == 2) { //fat
+		    if ( NbrFont == FatNumbers) { //fat
 		    		font1 = Ui.loadResource(Rez.Fonts.id_font_fat);
 		    		if (twelveNum == 0) {
 						targetDc.drawText((width / 2), 5, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
 					} else {
 						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
 					}
-		    		if (! MoonEnable) {
+		    		targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {
 		    			targetDc.drawText(width - 16, (height / 2) - 26, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
 	        		}
 	        		targetDc.drawText(width / 2, height - 54, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
 	        		targetDc.drawText(16, (height / 2) - 26, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
 		    	}
-		    if ( NbrFont == 3) { //race
+		    if ( NbrFont == RaceNumbers) { //race
 		    		font1 = Ui.loadResource(Rez.Fonts.id_font_race);
 		    		if (twelveNum == 0) {
 						targetDc.drawText((width / 2), 5, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
 					} else {
 						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
 					}
-		    		if (! MoonEnable) {	
+		    		targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {	
 		    			targetDc.drawText(width - 16, (height / 2) - 26, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
 	        		}
 	        		targetDc.drawText(width / 2, height - 52, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
 	        		targetDc.drawText(16, (height / 2) - 26, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
 		    	}
-		    if ( NbrFont == 4) { //classic
+		    if ( NbrFont == ClassicNumbers) { //classic
 		    		font1 = Ui.loadResource(Rez.Fonts.id_font_classic);
 		    		if (twelveNum == 0) {
 						targetDc.drawText((width / 2), 15, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
 					} else {
 						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
 					}
-		    		if (! MoonEnable) {	
+		    		targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {	
 		    			targetDc.drawText(width - 16, (height / 2) - 18, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
 	        		}
 	        		targetDc.drawText(width / 2, height - 48, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
 	        		targetDc.drawText(16, (height / 2) - 18, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
 		    	}
-		   if ( NbrFont == 5) {  //roman
+		   if ( NbrFont == RomanNumbers) {  //roman
 		    		font1 = Ui.loadResource(Rez.Fonts.id_font_roman);
 		    		if (twelveNum == 0) {
 						targetDc.drawText((width / 2), 7, font1, "}", Gfx.TEXT_JUSTIFY_CENTER);
 					} else {
 						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
 					}
-		    		if (! MoonEnable) {	
+		    		targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {	
 		    			targetDc.drawText(width - 16, (height / 2) - 22, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
 	        		}
 	        		targetDc.drawText(width / 2, height - 50, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
 	        		targetDc.drawText(16, (height / 2) - 22, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
 		   		}
-		   	if ( NbrFont == 6) {  //simple
+		   	if ( NbrFont == SimpleNumbers) {  //simple
 		   			if (twelveNum == 0) {
 						targetDc.drawText((width / 2), 10, Gfx.FONT_SYSTEM_LARGE, "12", Gfx.TEXT_JUSTIFY_CENTER);
 					} else {
 						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
 					}
-		    		if (! MoonEnable) {
+		    		targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {
 		    			targetDc.drawText(width - 16, (height / 2) - 22, Gfx.FONT_SYSTEM_LARGE  , rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
 	        		}
 	        		targetDc.drawText(width / 2, height - 45, Gfx.FONT_SYSTEM_LARGE   , "6", Gfx.TEXT_JUSTIFY_CENTER);
@@ -1098,9 +1157,9 @@ function drawBattery(dc) {
 	   	}
        
        
-       if (screenShape == 2) {  //semi round
+       if (screenShape == SemiRoundScreen) {  //semi round
        		iconDrop = 2;
-   		    if ( NbrFont == 1) { //fat
+   		    if ( NbrFont == Fat12Numbers) { //fat
 	    		font1 = Ui.loadResource(Rez.Fonts.id_font_fat);
 	    		if (twelveNum == 0) {
 					targetDc.drawText((width / 2), -12, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
@@ -1109,65 +1168,70 @@ function drawBattery(dc) {
 				}
 		    }
                   
-		    if ( NbrFont == 2) { //fat
+		    if ( NbrFont == FatNumbers) { //fat
 		    		font1 = Ui.loadResource(Rez.Fonts.id_font_fat);
 		    		if (twelveNum == 0) {
 						targetDc.drawText((width / 2), -12, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
 		    		} else {
 						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
 					}
-					if (! MoonEnable) {	
+					targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {	
 		    			targetDc.drawText(width - 16, (height / 2) - 26, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
 	        		}
 	        		targetDc.drawText(width / 2, height - 41, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
 	        		targetDc.drawText(16, (height / 2) - 26, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
 		    }
-		    if ( NbrFont == 3) { //race
+		    if ( NbrFont == RaceNumbers) { //race
 		    		font1 = Ui.loadResource(Rez.Fonts.id_font_race);
 		    		if (twelveNum == 0) {
 						targetDc.drawText((width / 2), -12, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
 		    		} else {
 						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
 					}
-					if (! MoonEnable) {		
+					targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {		
 		    			targetDc.drawText(width - 16, (height / 2) - 26, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
 	        		}
 	        		targetDc.drawText(width / 2, height - 39, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
 	        		targetDc.drawText(16, (height / 2) - 26, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
 		    	}
-		    if ( NbrFont == 4) { //classic
+		    if ( NbrFont == ClassicNumbers) { //classic
 		    		font1 = Ui.loadResource(Rez.Fonts.id_font_classic);
 		    		if (twelveNum == 0) {
 						targetDc.drawText((width / 2), 0, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
 		    		} else {
 						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
 					}
-					if (! MoonEnable) {		
+					targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {		
 		    			targetDc.drawText(width - 16, (height / 2) - 18, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
 	        		}
 	        		targetDc.drawText(width / 2, height - 33, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
 	        		targetDc.drawText(16, (height / 2) - 18, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
 		    	}
-		   if ( NbrFont == 5) {  //roman
+		   if ( NbrFont == RomanNumbers) {  //roman
 		    		font1 = Ui.loadResource(Rez.Fonts.id_font_roman);
 		    		if (twelveNum == 0) {
 						targetDc.drawText((width / 2), -4, font1, "}", Gfx.TEXT_JUSTIFY_CENTER);
 		    		} else {
 						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
 					}
-					if (! MoonEnable) {		
+					targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {		
 		    			targetDc.drawText(width - 16, (height / 2) - 22, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
 	        		}
 	        		targetDc.drawText(width / 2, height - 40, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
 	        		targetDc.drawText(16, (height / 2) - 22, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
 		   		}
-		   	if ( NbrFont == 6) {  //simple
+		   	if ( NbrFont == SimpleNumbers) {  //simple
 		    		if (twelveNum == 0) {
 						targetDc.drawText((width / 2), -3, Gfx.FONT_SYSTEM_LARGE   , "12", Gfx.TEXT_JUSTIFY_CENTER);
 		    		} else {
 						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
 					}
-					if (! MoonEnable) {		
+					targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {		
 		    			targetDc.drawText(width - 16, (height / 2) - 17, Gfx.FONT_SYSTEM_LARGE  , rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
 	        		}
 	        		targetDc.drawText(width / 2, height - 30, Gfx.FONT_SYSTEM_LARGE   , "6", Gfx.TEXT_JUSTIFY_CENTER);
@@ -1175,19 +1239,37 @@ function drawBattery(dc) {
 		   		}
 	   	} 
        
-
   // Draw hands under a lot sorta out of order ------------------------------------         
     	if (App.getApp().getProperty("HandsBehind")) {
     	   hands.drawHands(targetDc); 
     	 }
 		
+		//!progress battery------------
+		var BatProgressEnable = (App.getApp().getProperty("BatProgressEnable"));
+       	if (BatProgressEnable) {
+			drawBattery(targetDc);
+		}
+		//!progress steps--------------
+		var StepProgressEnable = (App.getApp().getProperty("StepProgressEnable"));
+       	if (StepProgressEnable) {
+			drawStepGoal(targetDc);
+		}
+		//! Markers for sunrise and sunset
+		var SunmarkersEnable = (App.getApp().getProperty("SunMarkersEnable"));		
+       	if (SunmarkersEnable && screenShape == RoundScreen) {
+       		//Sys.println("sunmarkers "+ SunmarkersEnable);
+			extras.drawSunMarkers(targetDc);
+		}
+		
+
 		
 		//! Alm / Msg indicators
-		var AlmMsgEnable = (App.getApp().getProperty("AlmMsgEnable"));
+//		var AlmMsgEnable = (App.getApp().getProperty("AlmMsgEnable"));
+//		var AlmMsgEnable = (App.getApp().getProperty("AlmMsg=")) != 0;
 		var AlmMsg = (App.getApp().getProperty("AlmMsg"));
 
 		
-		if (AlmMsgEnable) {
+		if (App.getApp().getProperty("AlmMsg=") != 0) {
 			var offcenter=width/6 - 5;
 			var labelLeft = "";
 			var labelRight = "";
@@ -1322,17 +1404,17 @@ function drawBattery(dc) {
         	//Sys.println("set classic");     
 	    	}
 	    if ( digiFont == 3) { //!simple
-	    	if (screenShape == 1) {  // round 
+	    	if (screenShape == RoundScreen) {  // round 
         		fontDigital = Gfx.FONT_SYSTEM_MEDIUM ; 
         	}
-        	if (screenShape == 2) {  // semi round 
+        	if (screenShape == SemiRoundScreen) {  // semi round 
         		fontDigital = Gfx.FONT_SYSTEM_LARGE ; 
         	}      	    
 	    }
 	    	
 	    	   
-	    var UpperDispEnable = (App.getApp().getProperty("UDInfo")!=0);
-	    var LowerDispEnable = (App.getApp().getProperty("LDInfo")!=0);
+	    var UpperDispEnable = (App.getApp().getProperty("UDInfo")!=DisplayNone);
+	    var LowerDispEnable = (App.getApp().getProperty("LDInfo")!=DisplayNone);
 
 	  	
 		//Anzeige oberes Display--------------------------  
@@ -1351,7 +1433,7 @@ function drawBattery(dc) {
         	//targetDc.drawText(ULTEXTx, ULTEXTy, fontDigital, "88:88/88:88", Gfx.TEXT_JUSTIFY_CENTER);	
 			targetDc.drawText(ULINFOx, ULINFOy, fontLabel, labelInfoText, Gfx.TEXT_JUSTIFY_RIGHT);
 			
-			if (displayInfo == 4) {
+			if (displayInfo == DisplayStepGraph) {
 			drawStepGraph(targetDc, ULTEXTx, ULTEXTy, ULINFOx, ULINFOy);
 			}	    				
 		}	
@@ -1376,7 +1458,7 @@ function drawBattery(dc) {
        // 	dc.drawText(LLTEXTx-25, LLTEXTy, fontDigital, "88888", Gfx.TEXT_JUSTIFY_CENTER);		
 			targetDc.drawText(LLINFOx, LLINFOy, fontLabel, labelInfoText, Gfx.TEXT_JUSTIFY_RIGHT);
 			
-			if (displayInfo == 4) {
+			if (displayInfo == DisplayStepGraph) {
 			drawStepGraph(targetDc, LLTEXTx, LLTEXTy, LLINFOx, LLINFOy);
 			}	    				
 		}
@@ -1400,7 +1482,7 @@ var setX = center_x;
 	if (showMoveBar) {
 	targetDc.setPenWidth(3);
 	
-		targetDc.setColor(App.getApp().getProperty("QuarterNumbersColor"), Gfx.COLOR_TRANSPARENT);
+		targetDc.setColor(App.getApp().getProperty("MoveBarColor"), Gfx.COLOR_TRANSPARENT);
 		if (ActMonitor.getInfo().moveBarLevel >= 1) {
 			targetDc.drawLine(setX - 7 , setY, setX  - 58, setY);		
 		//	dc.fillRoundedRectangle(ULBGx , setY, ULBGwidth/2 - 2 , 3, 3);
@@ -1440,14 +1522,19 @@ var setX = center_x;
 
   // Draw hands ------------------------------------------------------------------         
      if (!App.getApp().getProperty("HandsBehind")) {
-    	   hands.drawHands(dc); 
+    	   hands.drawHands(targetDc); 
     	 }     	
      	
   // Center Point with Bluetooth connection
 	  	//if ((App.getApp().getProperty("CenterDotEnable"))) {
-	  	if ((App.getApp().getProperty("ConnectionIndicator") ==1) && !(Sys.getDeviceSettings().phoneConnected)) {
-				targetDc.setColor((App.getApp().getProperty("BackgroundColor")), Gfx.COLOR_TRANSPARENT);
-		} else {
+	  	if ((App.getApp().getProperty("ConnectionIndicator") ==1)){
+	  		if (!(Sys.getDeviceSettings().phoneConnected)) {
+				targetDc.setColor((App.getApp().getProperty("DisconnectedColor")), Gfx.COLOR_TRANSPARENT);
+			} else {
+  				targetDc.setColor((App.getApp().getProperty("ConnectedColor")), Gfx.COLOR_TRANSPARENT);
+  			}
+  		}
+  		else {
   			targetDc.setColor((App.getApp().getProperty("HandsColor2")), Gfx.COLOR_TRANSPARENT);
 	   	} 
 
@@ -1465,22 +1552,33 @@ var setX = center_x;
  		targetDc.drawLine(0,height/2,width,height/2);
 */
  	
+ 	var SecHandStyle = App.getApp().getProperty("SecHandsForm");
+ 	if( partialUpdatesAllowed && (SecHandStyle==3) ) {
+            //draw center arbor
+            targetDc.setColor(App.getApp().getProperty("SecHands1Color"), Graphics.COLOR_TRANSPARENT);
+            targetDc.fillCircle(width / 2, height / 2, 4);
+            targetDc.setPenWidth(2);
+    }
  	// Output the offscreen buffers to the main display if required.
         drawBackground(dc);
         
  	 //draw second hand 
- 	 	var SecHandStyle = App.getApp().getProperty("SecHandsForm");
+ 	 	
 		if( partialUpdatesAllowed && (SecHandStyle==3) ) {
             // If this device supports partial updates and they are currently
             // allowed run the onPartialUpdate method to draw the second hand.
             //Sys.println("Entering onPartialUpdate");
+            //but first, draw center arbor
+            targetDc.setColor(App.getApp().getProperty("SecHands1Color"), Graphics.COLOR_TRANSPARENT);
+            targetDc.fillCircle(width / 2, height / 2, 4);
+            targetDc.setPenWidth(2);
             onPartialUpdate( dc );
-        } else if (isAwake) {
+        } else if ((isAwake) && (SecHandStyle > 0)){
 			//var SecHandEnable = (App.getApp().getProperty("SecHandEnable"));
-	   			if (SecHandStyle > 0) {
+//	   			if (SecHandStyle > 0) {
 	   			//Sys.println("Entering drawSecHands with arg: "+SecHandStyle);
 	 			hands.drawSecondHands(dc, SecHandStyle);
-	 			}
+//	 			}
  		}
  
 
@@ -1489,6 +1587,8 @@ Sys.println("used: " + System.getSystemStats().usedMemory);
 Sys.println("free: " + System.getSystemStats().freeMemory);
 Sys.println("total: " + System.getSystemStats().totalMemory);
 Sys.println("");
+
+
           fullScreenRefresh = false;
           
 } // end onUpdate(dc)-----------------------------------
@@ -1536,6 +1636,7 @@ Sys.println("");
  			
  		//fullScreenRefresh = false;
  			
+			
     }
 
     // Compute a bounding box from the passed in points
@@ -1596,6 +1697,9 @@ class AnalogDelegate extends Ui.WatchFaceDelegate {
         System.println( "Average execution time: " + powerInfo.executionTimeAverage );
         System.println( "Allowed execution time: " + powerInfo.executionTimeLimit );
         partialUpdatesAllowed = false;
+    }
+    function initialize() {
+        WatchFaceDelegate.initialize();    
     }
 }
 

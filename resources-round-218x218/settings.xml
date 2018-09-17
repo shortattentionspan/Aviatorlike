@@ -20,22 +20,45 @@
         <settingConfig type="boolean" />
     </setting>
     
+        
     <setting propertyKey="@Properties.MoveBarEnable" title="@Strings.MoveBarEnableTitle">
         <settingConfig type="boolean" />
     </setting>
     
-    <setting propertyKey="@Properties.AlmMsgEnable" title="@Strings.AlmMsgEnableTitle">
+    <setting propertyKey="@Properties.MoveBarColor" title="@Strings.MoveBarColorTitle">
+        <settingConfig type="list">
+            <listEntry value="0x000000">@Strings.ColorBlack</listEntry>        
+            <listEntry value="0x555555">@Strings.ColorDarkGray</listEntry>
+            <listEntry value="0xAAAAAA">@Strings.ColorLightGray</listEntry>
+            <listEntry value="0xFFFFFF">@Strings.ColorWhite</listEntry>
+            <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
+            <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
+            <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
+            <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
+            <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
+            <listEntry value="0x0000FF">@Strings.ColorDarkBlue</listEntry>
+            <listEntry value="0xAA00FF">@Strings.ColorPurple</listEntry>
+            <listEntry value="0xFF00FF">@Strings.ColorPink</listEntry>
+        </settingConfig>
+    </setting>
+
+
+<!--     <setting propertyKey="@Properties.AlmMsgEnable" title="@Strings.AlmMsgEnableTitle">
         <settingConfig type="boolean" />
     </setting>
     
+ -->
     <setting propertyKey="@Properties.AlmMsg" title="@Strings.AlmMsgTitle">
         <settingConfig type="list">
+            <listEntry value="0">@Strings.IF0</listEntry>
             <listEntry value="1">@Strings.IF1</listEntry>       
             <listEntry value="2">@Strings.IF2</listEntry>  
             <listEntry value="3">@Strings.IF3</listEntry>
             <listEntry value="4">@Strings.IF4</listEntry> 
-            <listEntry value="5">@Strings.IF5</listEntry> 
-            <listEntry value="6">@Strings.IF6</listEntry>  
+            <listEntry value="5">@Strings.IF5</listEntry>
+            <listEntry value="6">@Strings.IF6</listEntry>   
         </settingConfig>
     </setting>
     
@@ -56,6 +79,43 @@
         </settingConfig>
     </setting>
 
+    <setting propertyKey="@Properties.DisconnectedColor" title="@Strings.DisconnectedColorTitle">
+        <settingConfig type="list">
+            <listEntry value="0x000000">@Strings.ColorBlack</listEntry>        
+            <listEntry value="0x555555">@Strings.ColorDarkGray</listEntry>
+            <listEntry value="0xAAAAAA">@Strings.ColorLightGray</listEntry>
+            <listEntry value="0xFFFFFF">@Strings.ColorWhite</listEntry>
+            <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
+            <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
+            <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
+            <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
+            <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
+            <listEntry value="0x0000FF">@Strings.ColorDarkBlue</listEntry>
+            <listEntry value="0xAA00FF">@Strings.ColorPurple</listEntry>
+            <listEntry value="0xFF00FF">@Strings.ColorPink</listEntry>
+        </settingConfig>
+    </setting>
+
+    <setting propertyKey="@Properties.ConnectedColor" title="@Strings.ConnectedColorTitle">
+        <settingConfig type="list">
+            <listEntry value="0x000000">@Strings.ColorBlack</listEntry>        
+            <listEntry value="0x555555">@Strings.ColorDarkGray</listEntry>
+            <listEntry value="0xAAAAAA">@Strings.ColorLightGray</listEntry>
+            <listEntry value="0xFFFFFF">@Strings.ColorWhite</listEntry>
+            <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
+            <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
+            <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
+            <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
+            <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
+            <listEntry value="0x0000FF">@Strings.ColorDarkBlue</listEntry>
+            <listEntry value="0xAA00FF">@Strings.ColorPurple</listEntry>
+            <listEntry value="0xFF00FF">@Strings.ColorPink</listEntry>
+        </settingConfig>
+    </setting>
 
     <setting propertyKey="@Properties.UseIcons" title="@Strings.UseIconsTitle">
         <settingConfig type="boolean" />
@@ -70,7 +130,7 @@
             <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
             <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
             <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
-            <listEntry value="0xFFAA00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
             <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
             <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
             <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
@@ -80,7 +140,7 @@
         </settingConfig>
     </setting>
     
-        <setting propertyKey="@Properties.SixbitBackground" title="@Strings.SixbitBackgroundTitle">
+    <setting propertyKey="@Properties.SixbitBackground" title="@Strings.SixbitBackgroundTitle">
         <settingConfig type="boolean" />
     </setting>
 
@@ -124,7 +184,7 @@
             <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
             <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
             <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
-            <listEntry value="0xFFAA00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
             <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
             <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
             <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
@@ -144,7 +204,7 @@
             <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
             <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
             <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
-            <listEntry value="0xFFAA00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
             <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
             <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
             <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
@@ -163,7 +223,7 @@
             <listEntry value="3">@Strings.NbrRace</listEntry>
             <listEntry value="4">@Strings.NbrClassic</listEntry>
             <listEntry value="5">@Strings.NbrRoman</listEntry>  
-            <listEntry value="6">@Strings.NbrSimple</listEntry>          
+<!--             <listEntry value="6">@Strings.NbrSimple</listEntry>           -->
         </settingConfig>
     </setting>
     
@@ -176,7 +236,7 @@
             <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
             <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
             <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
-            <listEntry value="0xFFAA00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
             <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
             <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
             <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
@@ -196,7 +256,7 @@
             <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
             <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
             <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
-            <listEntry value="0xFFAA00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
             <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
             <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
             <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
@@ -206,11 +266,9 @@
         </settingConfig>
     </setting>
     
-    
-    
-     <setting propertyKey="@Properties.markslenth" title="@Strings.markslenthTitle">
+    <setting propertyKey="@Properties.markslenth" title="@Strings.markslenthTitle">
         <settingConfig type="numeric" min="0" max="5" required="true"/>
-    </setting>   
+    </setting>
     
     
     
@@ -223,7 +281,7 @@
             <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
             <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
             <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
-            <listEntry value="0xFFAA00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
             <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
             <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
             <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
@@ -245,7 +303,8 @@
         </settingConfig>
     </setting> 
     
-   
+
+    
    <setting propertyKey="@Properties.Reverse" title="@Strings.ReverseTitle">
    		<settingConfig type="boolean" />
    </setting>
@@ -260,7 +319,7 @@
             <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
             <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
             <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
-            <listEntry value="0xFFAA00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
             <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
             <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
             <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
@@ -270,7 +329,7 @@
         </settingConfig>
     </setting>
     
-        <setting propertyKey="@Properties.HandsColor2" title="@Strings.HandsColor2Title">
+    <setting propertyKey="@Properties.HandsColor2" title="@Strings.HandsColor2Title">
         <settingConfig type="list">
             <listEntry value="0x000000">@Strings.ColorBlack</listEntry>        
             <listEntry value="0x555555">@Strings.ColorDarkGray</listEntry>
@@ -279,7 +338,7 @@
             <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
             <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
             <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
-            <listEntry value="0xFFAA00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
             <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
             <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
             <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
@@ -302,7 +361,7 @@
             <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
             <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
             <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
-            <listEntry value="0xFFAA00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
             <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
             <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
             <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
@@ -311,17 +370,18 @@
             <listEntry value="0xFF00FF">@Strings.ColorPink</listEntry>
         </settingConfig>
     </setting>
-    
+
     <setting propertyKey="@Properties.HandsBehind" title="@Strings.HandsBehindTitle">
     	<settingConfig type="boolean" />
     </setting>
     
-<!--     <setting propertyKey="@Properties.SecHandEnable" title="@Strings.SecHandEnableTitle">
+<!-- Changing how second hands are chosen
+    <setting propertyKey="@Properties.SecHandEnable" title="@Strings.SecHandEnableTitle">
         <settingConfig type="boolean" />
     </setting>
- -->
-     
-        <setting propertyKey="@Properties.SecHandsForm" title="@Strings.SecHandsFormTitle">
+-->    
+
+    <setting propertyKey="@Properties.SecHandsForm" title="@Strings.SecHandsFormTitle">
         <settingConfig type="list">
             <listEntry value="0">@Strings.SF0</listEntry>        
             <listEntry value="1">@Strings.SF1</listEntry>
@@ -330,6 +390,7 @@
         </settingConfig>
     </setting>
     
+
     <setting propertyKey="@Properties.SecHands1Color" title="@Strings.SecHands1ColorTitle">
         <settingConfig type="list">
             <listEntry value="0x000000">@Strings.ColorBlack</listEntry>        
@@ -339,7 +400,7 @@
             <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
             <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
             <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
-            <listEntry value="0xFFAA00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
             <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
             <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
             <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
@@ -349,7 +410,7 @@
         </settingConfig>
     </setting>
     
-        <setting propertyKey="@Properties.SecHands2Color" title="@Strings.SecHands2ColorTitle">
+    <setting propertyKey="@Properties.SecHands2Color" title="@Strings.SecHands2ColorTitle">
         <settingConfig type="list">
             <listEntry value="0x000000">@Strings.ColorBlack</listEntry>        
             <listEntry value="0x555555">@Strings.ColorDarkGray</listEntry>
@@ -358,7 +419,7 @@
             <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
             <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
             <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
-            <listEntry value="0xFFAA00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
             <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
             <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
             <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
@@ -376,7 +437,7 @@
         </settingConfig>
     </setting>
     
-        <setting propertyKey="@Properties.DateFormat" title="@Strings.DateFormatTitle">
+    <setting propertyKey="@Properties.DateFormat" title="@Strings.DateFormatTitle">
         <settingConfig type="list">
          	<listEntry value="1">@Strings.DF1</listEntry>
             <listEntry value="2">@Strings.DF2</listEntry>
@@ -388,17 +449,18 @@
         </settingConfig>
     </setting>
     
-<!--      <setting propertyKey="@Properties.UpperDispEnable" title="@Strings.UpperDispEnableTitle">
+    <!-- 
+     <setting propertyKey="@Properties.UpperDispEnable" title="@Strings.UpperDispEnableTitle">
         <settingConfig type="boolean" />
-    </setting> 
- -->
-    
+    </setting>
+     --> 
+   
     <setting propertyKey="@Properties.UDInfo" title="@Strings.UDInfoTitle">
         <settingConfig type="list">
         	<listEntry value="0">@Strings.DNone</listEntry>
-         	<listEntry value="1">@Strings.DDate</listEntry>
-            <listEntry value="2">@Strings.DSteps</listEntry>
-            <listEntry value="3">@Strings.DStepstogo</listEntry> 
+        	<listEntry value="1">@Strings.DDate</listEntry>
+            <listEntry value="2">@Strings.DSteps</listEntry> 
+            <listEntry value="3">@Strings.DStepstogo</listEntry>       
             <listEntry value="4">@Strings.DStepGraph</listEntry>                  
             <listEntry value="5">@Strings.DDigitalClock</listEntry>
             <listEntry value="6">@Strings.DAltitude</listEntry>
@@ -414,8 +476,8 @@
 <!--      <setting propertyKey="@Properties.LowerDispEnable" title="@Strings.LowerDispEnableTitle">
         <settingConfig type="boolean" />
     </setting>
- -->
-     
+     -->
+    
     <setting propertyKey="@Properties.LDInfo" title="@Strings.LDInfoTitle">
         <settingConfig type="list">
         	<listEntry value="0">@Strings.DNone</listEntry>
@@ -433,7 +495,6 @@
             <listEntry value="12">@Strings.DHR</listEntry>
         </settingConfig>
     </setting>
-
 
     <setting propertyKey="@Properties.DualTimeTZ" title="@Strings.DualTimeTZ">
         <settingConfig type="list">

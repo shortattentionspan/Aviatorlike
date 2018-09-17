@@ -21,12 +21,34 @@
         <settingConfig type="boolean" />
     </setting>
     
-    <setting propertyKey="@Properties.AlmMsgEnable" title="@Strings.AlmMsgEnableTitle">
-        <settingConfig type="boolean" />
+    <setting propertyKey="@Properties.MoveBarColor" title="@Strings.MoveBarColorTitle">
+        <settingConfig type="list">
+            <listEntry value="0x000000">@Strings.ColorBlack</listEntry>        
+            <listEntry value="0x555555">@Strings.ColorDarkGray</listEntry>
+            <listEntry value="0xAAAAAA">@Strings.ColorLightGray</listEntry>
+            <listEntry value="0xFFFFFF">@Strings.ColorWhite</listEntry>
+            <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
+            <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
+            <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
+            <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
+            <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
+            <listEntry value="0x0000FF">@Strings.ColorDarkBlue</listEntry>
+            <listEntry value="0xAA00FF">@Strings.ColorPurple</listEntry>
+            <listEntry value="0xFF00FF">@Strings.ColorPink</listEntry>
+        </settingConfig>
     </setting>
 
+
+<!--     <setting propertyKey="@Properties.AlmMsgEnable" title="@Strings.AlmMsgEnableTitle">
+        <settingConfig type="boolean" />
+    </setting>
+ -->
+ 
     <setting propertyKey="@Properties.AlmMsg" title="@Strings.AlmMsgTitle">
         <settingConfig type="list">
+            <listEntry value="0">@Strings.IF0</listEntry>
             <listEntry value="1">@Strings.IF1</listEntry>       
             <listEntry value="2">@Strings.IF2</listEntry>  
             <listEntry value="3">@Strings.IF3</listEntry>
@@ -54,6 +76,43 @@
         </settingConfig>
     </setting>
 
+    <setting propertyKey="@Properties.DisconnectedColor" title="@Strings.DisconnectedColorTitle">
+        <settingConfig type="list">
+            <listEntry value="0x000000">@Strings.ColorBlack</listEntry>        
+            <listEntry value="0x555555">@Strings.ColorDarkGray</listEntry>
+            <listEntry value="0xAAAAAA">@Strings.ColorLightGray</listEntry>
+            <listEntry value="0xFFFFFF">@Strings.ColorWhite</listEntry>
+            <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
+            <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
+            <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
+            <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
+            <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
+            <listEntry value="0x0000FF">@Strings.ColorDarkBlue</listEntry>
+            <listEntry value="0xAA00FF">@Strings.ColorPurple</listEntry>
+            <listEntry value="0xFF00FF">@Strings.ColorPink</listEntry>
+        </settingConfig>
+    </setting>
+
+    <setting propertyKey="@Properties.ConnectedColor" title="@Strings.ConnectedColorTitle">
+        <settingConfig type="list">
+            <listEntry value="0x000000">@Strings.ColorBlack</listEntry>        
+            <listEntry value="0x555555">@Strings.ColorDarkGray</listEntry>
+            <listEntry value="0xAAAAAA">@Strings.ColorLightGray</listEntry>
+            <listEntry value="0xFFFFFF">@Strings.ColorWhite</listEntry>
+            <listEntry value="0xFF0000">@Strings.ColorRed</listEntry>
+            <listEntry value="0xAA0000">@Strings.ColorDarkRed</listEntry>
+            <listEntry value="0xFF5500">@Strings.ColorOrange</listEntry>
+            <listEntry value="0xFFFF00">@Strings.ColorYellow</listEntry>            
+            <listEntry value="0x00FF00">@Strings.ColorGreen</listEntry>
+            <listEntry value="0x00AA00">@Strings.ColorDarkGreen</listEntry>
+            <listEntry value="0x00AAFF">@Strings.ColorBlue</listEntry>
+            <listEntry value="0x0000FF">@Strings.ColorDarkBlue</listEntry>
+            <listEntry value="0xAA00FF">@Strings.ColorPurple</listEntry>
+            <listEntry value="0xFF00FF">@Strings.ColorPink</listEntry>
+        </settingConfig>
+    </setting>
 
     <setting propertyKey="@Properties.UseIcons" title="@Strings.UseIconsTitle">
         <settingConfig type="boolean" />
@@ -78,7 +137,8 @@
             <listEntry value="0xFF00FF">@Strings.ColorPink</listEntry>           
         </settingConfig>
     </setting>
-    
+
+<!--  I don't think any semi-round watches are six bit color, so they don't need this part
         <setting propertyKey="@Properties.SixbitBackground" title="@Strings.SixbitBackgroundTitle">
         <settingConfig type="boolean" />
     </setting>
@@ -109,6 +169,7 @@
             <listEntry value="0x0000FF">@Strings.ColorFF</listEntry>
         </settingConfig>
     </setting>
+  -->
     
     <setting propertyKey="@Properties.ShowDigitalBackground" title="@Strings.ShowDigitalBackgroundTitle">
         <settingConfig type="boolean" />
@@ -162,7 +223,7 @@
             <listEntry value="3">@Strings.NbrRace</listEntry>
             <listEntry value="4">@Strings.NbrClassic</listEntry>
             <listEntry value="5">@Strings.NbrRoman</listEntry>  
-            <listEntry value="6">@Strings.NbrSimple</listEntry>          
+<!--             <listEntry value="6">@Strings.NbrSimple</listEntry>           -->
         </settingConfig>
     </setting>
     
@@ -315,7 +376,8 @@
     	<settingConfig type="boolean" />
     </setting>
     
-<!-- Changing how second hands are chosen    <setting propertyKey="@Properties.SecHandEnable" title="@Strings.SecHandEnableTitle">
+<!-- Changing how second hands are chosen
+    <setting propertyKey="@Properties.SecHandEnable" title="@Strings.SecHandEnableTitle">
         <settingConfig type="boolean" />
     </setting>
     -->

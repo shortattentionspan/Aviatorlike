@@ -1,5 +1,5 @@
 <properties>
-	<property id="appVersion" type="string">1.0.1-reverse</property>
+	<property id="appVersion" type="string">1.0.2-reverse</property>
 	
 	<property id="BatProgressEnable" type="boolean">true</property>
 	<property id="StepProgressEnable" type="boolean">true</property>
@@ -7,10 +7,15 @@
 	<property id="MoonEnable" type="boolean">false</property>
 	<property id="MoveBarEnable" type="boolean">true</property>
 	
-	<property id="AlmMsgEnable" type="boolean">true</property>
+	<property id="MoveBarColor" type="number">0x555555</property>
+	
+<!-- 	<property id="AlmMsgEnable" type="boolean">true</property> -->
 	<property id="AlmMsg" type="number">1</property>
 	<property id="CenterDotEnable" type="boolean">true</property>
 	<property id="ConnectionIndicator" type="number">2</property>
+	<property id="DisconnectedColor" type="number">0xFF0000</property>
+	<property id="ConnectedColor" type="number">0x0000FF</property>
+	
 	
 	
     <property id="SixbitBackground" type="boolean">false</property>
@@ -50,7 +55,7 @@
     <property id="DateFormat" type="number">1</property>
     <property id="UpperDispEnable" type="boolean">true</property>
     <property id="UDInfo" type="number">1</property>
-     <property id="LowerDispEnable" type="boolean">true</property>
+    <property id="LowerDispEnable" type="boolean">true</property>
     <property id="LDInfo" type="number">2</property>
     
     <property id="DualTimeTZ" type="number">0</property>

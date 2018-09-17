@@ -46,8 +46,11 @@
     <string id="MoonEnableTitle">Enable moon phase on pos. 3 o´clock</string>
     <string id="MoveBarEnableTitle">Enable inactivity move bar </string>
     
-    <string id="AlmMsgEnableTitle">Enable center indicators</string>
+    <string id="MoveBarColorTitle">Move bar color</string>
+    
+<!--     <string id="AlmMsgEnableTitle">Enable center indicators</string> -->
 	<string id="AlmMsgTitle">Indicator info</string>
+	<string id="IF0">No indicator</string>
     <string id="IF1">Alm/Msg count</string>
     <string id="IF2">Alm/Msg only indicator</string>
     <string id="IF3">Day and week of year</string>
@@ -57,7 +60,7 @@
     
     
     
-    <string id="CenterDotEnableTitle">Enable center dot as BT indicator</string>
+<!--     <string id="CenterDotEnableTitle">Enable center dot as BT indicator</string> -->
     
     <string id="ConnectionIndicatorTitle">Show connection indicator</string>
     <string id="CI0">No connection indicator</string>
@@ -65,6 +68,10 @@
     <string id="CI2">Phone connected icon at 12</string>
     <string id="CI3">Phone disconnected icon at 12</string>
     <string id="CI4">Phone state instead of 12</string>
+    
+    <string id="DisconnectedColorTitle">Color of Disconnected status icon or dot, if any</string>
+    <string id="ConnectedColorTitle">Color of Connected status icon or dot, if any</string>
+    
     
     <string id="CIPrompt">How to show whether or not there is a connection to the phone</string>
 
