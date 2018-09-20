@@ -4,6 +4,9 @@
 	<property id="BatProgressEnable" type="boolean">true</property>
 	<property id="StepProgressEnable" type="boolean">true</property>
 	<property id="SunMarkersEnable" type="boolean">false</property>
+	<property id="MarkersOutlineColor" type="number">0</property>
+	<property id="SunUpMarkerFillColor" type="number">0xFFFF00</property>
+	<property id="SunDownMarkerFillColor" type="number">0x0000FF</property>
 	<property id="MoonEnable" type="boolean">false</property>
 	<property id="MoveBarEnable" type="boolean">true</property>
 	
@@ -21,7 +24,7 @@
     <property id="SixbitBackground" type="boolean">false</property>
     <property id="UseIcons" type="boolean">false</property>
     
-    <property id="BackgroundColor" type="number">0x0000FF</property>
+    <property id="BackgroundColor" type="number">0xAAAAAA</property>
     <property id="BackgroundColorR" type="number">0x000000</property>
     <property id="BackgroundColorG" type="number">0x000000</property>
     <property id="BackgroundColorB" type="number">0x0000AA</property>

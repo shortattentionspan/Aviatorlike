@@ -70,6 +70,10 @@ class AviatorlikeView extends Ui.WatchFace{
 		const DisconnectedPhoneIcon="D";
 		const ShoesFilledIcon="S";
 		const ShoesOutlineIcon="s";
+		const SunUpOutlineIcon = "5";
+		const SunUpFillIcon= "6";
+		const SunDownOutlineIcon = "7";
+		const SunDownFillIcon = "8";
 		
 		const RoundScreen=1;
 		const SemiRoundScreen=2;
@@ -115,15 +119,9 @@ class AviatorlikeView extends Ui.WatchFace{
         partialUpdatesAllowed = ((Toybox.Graphics has :BufferedBitmap) && (Toybox.WatchUi.WatchFace has :onPartialUpdate));
                
     }//end of initialize()
-   
-    
-    function onLayout(dc) { 
-        width = dc.getWidth();
-        height = dc.getHeight();
-        center_x = dc.getWidth() / 2;
-        center_y = dc.getHeight() / 2;
-        
-		if (width == 218 && height == 218) {
+
+(:round218dial)
+	function Round218Settings() {
 			Sys.println("device:" + "Fenix3 218");
 			ULBGx = 38;
 		   	ULBGy = 50;
@@ -149,7 +147,9 @@ class AviatorlikeView extends Ui.WatchFace{
 		   	moony = 88;
 		   	moonwidth = 40; 		
 		}
-		if (width == 240 && height == 240) {
+
+(:round240dial )
+	function Round240Settings() {
 			Sys.println("device:" + "Fenix5 240");
 			ULBGx = 45;
 		   	ULBGy = 57;
@@ -174,8 +174,10 @@ class AviatorlikeView extends Ui.WatchFace{
 		   	moonx = 185;
 		   	moony = 99;
 		   	moonwidth = 40; 		
-		}
-		if (width == 215 && height == 180) {
+	}
+	
+(:semirounddial)
+	function SemiRoundSettings() {
 			Sys.println("device:" + "Semiround");
 			ULBGx = 35;
 		   	ULBGy = 33;
@@ -200,7 +202,24 @@ class AviatorlikeView extends Ui.WatchFace{
 		   	moonx = 165;
 		   	moony = 71;
 		   	moonwidth = 36; 		
-		} 
+	} 
+    
+    function onLayout(dc) { 
+        width = dc.getWidth();
+        height = dc.getHeight();
+        center_x = dc.getWidth() / 2;
+        center_y = dc.getHeight() / 2;
+        
+
+		if (width == 218 && height == 218) {
+			Round218Settings();
+		}
+		if (width == 240 && height == 240) {
+			Round240Settings();
+		}
+		if (width == 215 && height == 180) {
+			SemiRoundSettings();
+		}
 		
 	 // If this device supports BufferedBitmap, allocate the buffers we use for drawing
         if((Toybox.Graphics has :BufferedBitmap) && (Ui.WatchFace has :onPartialUpdate)) {
@@ -559,11 +578,12 @@ function drawBattery(dc) {
 			r2 = r1 -lenth; ////Länge des Bat-Zeigers
 										
 			if (App.getApp().getProperty("UseIcons")){
-				dc.fillRectangle(center_x+r2*Math.sin(alpha)-10,center_y-r2*Math.cos(alpha) - 4,18,10);
-				dc.setColor(App.getApp().getProperty("HandsOutlineColor"), Gfx.COLOR_TRANSPARENT);
+				dc.fillRectangle(center_x+r2*Math.sin(alpha)-10,center_y-r2*Math.cos(alpha) - 4,18,11);
+				dc.setColor(App.getApp().getProperty("MarkersOutlineColor"), Gfx.COLOR_TRANSPARENT);
 				//dc.setPenWidth(1);
 				//dc.drawRectangle(center_x+r2*Math.sin(alpha)-10,center_y-r2*Math.cos(alpha) - 4,18,10);
 				dc.drawText(center_x+r2*Math.sin(alpha),center_y-r2*Math.cos(alpha) - 6, fontIcons, BatteryIcon, Gfx.TEXT_JUSTIFY_CENTER);  //battery icon
+				dc.drawText(center_x+r2*Math.sin(alpha)-1,center_y-r2*Math.cos(alpha) - 8, fontLabel, Battery.format("%i"), Gfx.TEXT_JUSTIFY_CENTER);
 			}
 			else {
 				hand =     [[center_x+r1*Math.sin(alpha+0.1),center_y-r1*Math.cos(alpha+0.1)],
@@ -949,6 +969,356 @@ function drawBattery(dc) {
 		   		    	    
 	}		
 	
+(:rounddial)
+	function DrawRoundScreenNumbers(dc) {      // Draw the numbers --------------------------------------------------------------------------------------
+       var NbrFont = (App.getApp().getProperty("Numbers")); 
+       dc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
+       var font1 = 0;  
+       var rightNum="3";
+       var leftNum="9";
+       var twelveNum=0;
+       var iconDrop = 19;
+       //var twelveFont;
+       var MoonEnable = (App.getApp().getProperty("MoonEnable"));
+       
+		var numColor = App.getApp().getProperty("NumbersColor");
+		
+		dc.setColor(numColor, Gfx.COLOR_TRANSPARENT);
+
+       
+		if (App.getApp().getProperty("ConnectionIndicator") < 2){
+			//twelveNum=0;
+		} else {
+			if (Sys.getDeviceSettings().phoneConnected) {
+				if ((App.getApp().getProperty("ConnectionIndicator") % 2) == 0) {
+					twelveNum = ConnectedPhoneIcon;
+					dc.setColor((App.getApp().getProperty("ConnectedColor")), Gfx.COLOR_TRANSPARENT);
+				} else {
+					//twelveNum = 0;
+					//targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
+				}
+			} else {
+				if (App.getApp().getProperty("ConnectionIndicator") > 2) {
+					twelveNum= DisconnectedPhoneIcon;
+					dc.setColor((App.getApp().getProperty("DisconnectedColor")), Gfx.COLOR_TRANSPARENT);
+				} else {
+					//twelveNum= 0;
+					//targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
+				}
+			}
+		}
+		
+       
+       
+       
+       if (App.getApp().getProperty("Reverse")) {
+       	rightNum="9";
+       	leftNum="3";
+       	}
+       
+       		    if ( NbrFont == Fat12Numbers) { //fat 12 only
+	    		font1 = Ui.loadResource(Rez.Fonts.id_font_fat);
+	    		if (twelveNum == 0) {
+					dc.drawText((width / 2), 5, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
+				} else {
+					dc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
+				}
+			
+	    	}            
+		    if ( NbrFont == FatNumbers) { //fat
+		    		font1 = Ui.loadResource(Rez.Fonts.id_font_fat);
+		    		if (twelveNum == 0) {
+						dc.drawText((width / 2), 5, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
+					} else {
+						dc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
+					}
+		    		dc.setColor(numColor, Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {
+		    			dc.drawText(width - 16, (height / 2) - 26, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
+	        		}
+	        		dc.drawText(width / 2, height - 54, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
+	        		dc.drawText(16, (height / 2) - 26, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
+		    	}
+		    if ( NbrFont == RaceNumbers) { //race
+		    		font1 = Ui.loadResource(Rez.Fonts.id_font_race);
+		    		if (twelveNum == 0) {
+						dc.drawText((width / 2), 5, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
+					} else {
+						dc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
+					}
+		    		dc.setColor(numColor, Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {	
+		    			dc.drawText(width - 16, (height / 2) - 26, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
+	        		}
+	        		dc.drawText(width / 2, height - 52, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
+	        		dc.drawText(16, (height / 2) - 26, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
+		    	}
+		    if ( NbrFont == ClassicNumbers) { //classic
+		    		font1 = Ui.loadResource(Rez.Fonts.id_font_classic);
+		    		if (twelveNum == 0) {
+						dc.drawText((width / 2), 15, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
+					} else {
+						dc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
+					}
+		    		dc.setColor(numColor, Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {	
+		    			dc.drawText(width - 16, (height / 2) - 18, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
+	        		}
+	        		dc.drawText(width / 2, height - 48, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
+	        		dc.drawText(16, (height / 2) - 18, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
+		    	}
+		   if ( NbrFont == RomanNumbers) {  //roman
+		    		font1 = Ui.loadResource(Rez.Fonts.id_font_roman);
+		    		if (twelveNum == 0) {
+						dc.drawText((width / 2), 7, font1, "}", Gfx.TEXT_JUSTIFY_CENTER);
+					} else {
+						dc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
+					}
+		    		dc.setColor(numColor, Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {	
+		    			dc.drawText(width - 16, (height / 2) - 22, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
+	        		}
+	        		dc.drawText(width / 2, height - 50, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
+	        		dc.drawText(16, (height / 2) - 22, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
+		   		}
+		   	if ( NbrFont == SimpleNumbers) {  //simple
+		   			if (twelveNum == 0) {
+						dc.drawText((width / 2), 10, Gfx.FONT_SYSTEM_LARGE, "12", Gfx.TEXT_JUSTIFY_CENTER);
+					} else {
+						dc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
+					}
+		    		dc.setColor(numColor, Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {
+		    			dc.drawText(width - 16, (height / 2) - 22, Gfx.FONT_SYSTEM_LARGE  , rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
+	        		}
+	        		dc.drawText(width / 2, height - 45, Gfx.FONT_SYSTEM_LARGE   , "6", Gfx.TEXT_JUSTIFY_CENTER);
+	        		dc.drawText(16, (height / 2) - 22, Gfx.FONT_SYSTEM_LARGE   , leftNum, Gfx.TEXT_JUSTIFY_LEFT);
+		   		}
+	   	
+       
+	}
+	
+(:semirounddial)
+	function DrawSemiRoundScreenNumbers(dc) {
+		var NbrFont = (App.getApp().getProperty("Numbers")); 
+       	
+       	var font1 = 0;  
+       	var rightNum="3";
+       	var leftNum="9";
+       	var twelveNum=0;
+       	var iconDrop = 19;
+       	//var twelveFont;
+       	var MoonEnable = (App.getApp().getProperty("MoonEnable"));
+       
+		
+		var numColor = App.getApp().getProperty("NumbersColor");
+		
+		dc.setColor(numColor, Gfx.COLOR_TRANSPARENT);
+		
+		if (App.getApp().getProperty("ConnectionIndicator") < 2){
+			//twelveNum=0;
+		} else {
+			if (Sys.getDeviceSettings().phoneConnected) {
+				if ((App.getApp().getProperty("ConnectionIndicator") % 2) == 0) {
+					twelveNum = ConnectedPhoneIcon;
+					dc.setColor((App.getApp().getProperty("ConnectedColor")), Gfx.COLOR_TRANSPARENT);
+				} else {
+					//twelveNum = 0;
+					//targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
+				}
+			} else {
+				if (App.getApp().getProperty("ConnectionIndicator") > 2) {
+					twelveNum= DisconnectedPhoneIcon;
+					dc.setColor((App.getApp().getProperty("DisconnectedColor")), Gfx.COLOR_TRANSPARENT);
+				} else {
+					//twelveNum= 0;
+					//targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
+				}
+			}
+		}
+		
+       
+       
+       
+       if (App.getApp().getProperty("Reverse")) {
+       	rightNum="9";
+       	leftNum="3";
+       	}
+       
+       
+       		iconDrop = 2;
+   		    if ( NbrFont == Fat12Numbers) { //fat
+	    		font1 = Ui.loadResource(Rez.Fonts.id_font_fat);
+	    		if (twelveNum == 0) {
+					dc.drawText((width / 2), -12, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
+				} else {
+					dc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
+				}
+		    }
+                  
+		    if ( NbrFont == FatNumbers) { //fat
+		    		font1 = Ui.loadResource(Rez.Fonts.id_font_fat);
+		    		if (twelveNum == 0) {
+						dc.drawText((width / 2), -12, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
+		    		} else {
+						dc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
+					}
+					dc.setColor(numColor, Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {	
+		    			dc.drawText(width - 16, (height / 2) - 26, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
+	        		}
+	        		dc.drawText(width / 2, height - 41, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
+	        		dc.drawText(16, (height / 2) - 26, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
+		    }
+		    if ( NbrFont == RaceNumbers) { //race
+		    		font1 = Ui.loadResource(Rez.Fonts.id_font_race);
+		    		if (twelveNum == 0) {
+						dc.drawText((width / 2), -12, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
+		    		} else {
+						dc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
+					}
+					dc.setColor(numColor, Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {		
+		    			dc.drawText(width - 16, (height / 2) - 26, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
+	        		}
+	        		dc.drawText(width / 2, height - 39, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
+	        		dc.drawText(16, (height / 2) - 26, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
+		    	}
+		    if ( NbrFont == ClassicNumbers) { //classic
+		    		font1 = Ui.loadResource(Rez.Fonts.id_font_classic);
+		    		if (twelveNum == 0) {
+						dc.drawText((width / 2), 0, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
+		    		} else {
+						dc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
+					}
+					dc.setColor(numColor, Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {		
+		    			dc.drawText(width - 16, (height / 2) - 18, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
+	        		}
+	        		dc.drawText(width / 2, height - 33, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
+	        		dc.drawText(16, (height / 2) - 18, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
+		    	}
+		   if ( NbrFont == RomanNumbers) {  //roman
+		    		font1 = Ui.loadResource(Rez.Fonts.id_font_roman);
+		    		if (twelveNum == 0) {
+						dc.drawText((width / 2), -4, font1, "}", Gfx.TEXT_JUSTIFY_CENTER);
+		    		} else {
+						dc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
+					}
+					dc.setColor(numColor, Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {		
+		    			dc.drawText(width - 16, (height / 2) - 22, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
+	        		}
+	        		dc.drawText(width / 2, height - 40, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
+	        		dc.drawText(16, (height / 2) - 22, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
+		   		}
+		   	if ( NbrFont == SimpleNumbers) {  //simple
+		    		if (twelveNum == 0) {
+						dc.drawText((width / 2), -3, Gfx.FONT_SYSTEM_LARGE   , "12", Gfx.TEXT_JUSTIFY_CENTER);
+		    		} else {
+						dc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
+					}
+					dc.setColor(numColor, Gfx.COLOR_TRANSPARENT);
+	        		if (! MoonEnable) {		
+		    			dc.drawText(width - 16, (height / 2) - 17, Gfx.FONT_SYSTEM_LARGE  , rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
+	        		}
+	        		dc.drawText(width / 2, height - 30, Gfx.FONT_SYSTEM_LARGE   , "6", Gfx.TEXT_JUSTIFY_CENTER);
+	        		dc.drawText(16, (height / 2) - 17, Gfx.FONT_SYSTEM_LARGE   , leftNum, Gfx.TEXT_JUSTIFY_LEFT);
+		   		}
+	   	 	
+	}
+	
+(:rounddial)
+ function drawSunMarkers(dc) {
+	// Draw Sunset / sunrise markers -------------------------------------------------------------------------
+        
+        var alphaSunrise = 0;
+        var alphaSunset = 0;
+        var hand; 
+
+	   
+	   	var sc = new SunCalc();
+		var lat;
+		var lon;		
+		var loc = Act.getActivityInfo().currentLocation;
+		
+		//var fontIcons = Toybox.WatchUi.loadResource(Rez.Fonts.id_font_icons);
+
+		if (loc == null)
+		{
+			lat = App.getApp().getProperty(LAT);
+			lon = App.getApp().getProperty(LON);
+		} 
+		else
+		{
+			lat = loc.toDegrees()[0] * Math.PI / 180.0;
+			App.getApp().setProperty(LAT, lat);
+			lon = loc.toDegrees()[1] * Math.PI / 180.0;
+			App.getApp().setProperty(LON, lon);
+		}
+
+//		lat = 52.375892 * Math.PI / 180.0;
+//		lon = 9.732010 * Math.PI / 180.0;
+
+		if(lat != null && lon != null)
+		{
+			var now = new Time.Moment(Time.now().value());			
+			var sunrise_moment = sc.calculate(now, lat.toDouble(), lon.toDouble(), SUNRISE);
+			var sunset_moment = sc.calculate(now, lat.toDouble(), lon.toDouble(), SUNSET);
+			
+			var sunriseTinfo = Time.Gregorian.info(new Time.Moment(sunrise_moment.value() + 30), Time.FORMAT_SHORT);
+			var sunsetTinfo = Time.Gregorian.info(new Time.Moment(sunset_moment.value() + 30), Time.FORMAT_SHORT);
+			var reverseMultiplier= App.getApp().getProperty("Reverse") ? -1 : 1 ;
+   	       
+    		alphaSunrise = reverseMultiplier*Math.PI/6*(1.0*sunriseTinfo.hour+sunriseTinfo.min/60.0);
+    		alphaSunset = reverseMultiplier*Math.PI/6*(1.0*sunsetTinfo.hour+sunsetTinfo.min/60.0);
+      
+        	var r1, r2;      	
+        	var outerRad = 0;
+        	var lenth = 10;
+        	var center_x = dc.getWidth() / 2;
+        	var center_y = dc.getHeight() / 2;
+     
+			r1 = dc.getWidth()/2 - outerRad; //outside
+			r2 = r1 -lenth; ////Länge des Zeigers
+			var r1offset=7;
+			
+			if (App.getApp().getProperty("UseIcons")) {
+				dc.setColor(App.getApp().getProperty("MarkersOutlineColor"),Gfx.COLOR_TRANSPARENT); 
+				dc.setPenWidth(2);		
+				dc.drawLine(center_x+r1*Math.sin(alphaSunrise),center_y-r1*Math.cos(alphaSunrise), center_x+(r2-10)*Math.sin(alphaSunrise),center_y-(r2-10)*Math.cos(alphaSunrise));		
+				dc.drawLine(center_x+r1*Math.sin(alphaSunset),center_y-r1*Math.cos(alphaSunset), center_x+(r2-10)*Math.sin(alphaSunset),center_y-(r2-10)*Math.cos(alphaSunset));
+
+				dc.drawText(center_x+(r1-r1offset)*Math.sin(alphaSunrise),center_y-(r1-r1offset)*Math.cos(alphaSunrise)-6,fontIcons,SunUpOutlineIcon,Gfx.TEXT_JUSTIFY_CENTER);
+				dc.drawText(center_x+(r1-r1offset)*Math.sin(alphaSunset),center_y-(r1-r1offset)*Math.cos(alphaSunset)-6,fontIcons,SunDownOutlineIcon,Gfx.TEXT_JUSTIFY_CENTER);
+				
+				dc.setColor(0xFFFF00, Gfx.COLOR_TRANSPARENT); //Haard coding to a different yellow. Don't think it'll affect 14-color watches...	
+				dc.drawText(center_x+(r1-r1offset)*Math.sin(alphaSunrise),center_y-(r1-r1offset)*Math.cos(alphaSunrise)-6,fontIcons,SunUpFillIcon,Gfx.TEXT_JUSTIFY_CENTER);	
+				dc.setColor(Gfx.COLOR_DK_BLUE, Gfx.COLOR_TRANSPARENT);
+				dc.drawText(center_x+(r1-r1offset)*Math.sin(alphaSunset),center_y-(r1-r1offset)*Math.cos(alphaSunset)-6,fontIcons,SunDownFillIcon,Gfx.TEXT_JUSTIFY_CENTER);
+			}
+			else
+			{
+			//dc.setColor(Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
+				dc.setColor(0xFFFF00, Gfx.COLOR_TRANSPARENT); //Hard coding to a different yellow. Don't think it'll affect 14-color watches...	
+				dc.fillCircle(center_x+(r1-15)*Math.sin(alphaSunrise),center_y-(r1-15)*Math.cos(alphaSunrise),6);	
+				dc.setColor(Gfx.COLOR_DK_BLUE, Gfx.COLOR_TRANSPARENT);
+				dc.fillCircle(center_x+(r1-5)*Math.sin(alphaSunset),center_y-(r1-5)*Math.cos(alphaSunset),6); 			      
+     
+				dc.setColor(App.getApp().getProperty("MarkersOutlineColor"), Gfx.COLOR_TRANSPARENT);
+						
+				dc.setPenWidth(2);		
+				dc.drawLine(center_x+r1*Math.sin(alphaSunrise),center_y-r1*Math.cos(alphaSunrise), center_x+r2*Math.sin(alphaSunrise),center_y-r2*Math.cos(alphaSunrise));		
+				dc.drawLine(center_x+(r1-12)*Math.sin(alphaSunset),center_y-(r1-12)*Math.cos(alphaSunset), center_x+(r2-10)*Math.sin(alphaSunset),center_y-(r2-10)*Math.cos(alphaSunset));
+		
+				dc.setPenWidth(1);
+				dc.drawCircle(center_x+(r1-15)*Math.sin(alphaSunrise),center_y-(r1-15)*Math.cos(alphaSunrise),6);			
+				dc.drawCircle(center_x+(r1-5)*Math.sin(alphaSunset),center_y-(r1-5)*Math.cos(alphaSunset),6);
+			}
+			
+		}			
+	}
+	
 	
 //-----------------------------------------------------------------------------------------------
 // Handle the update event-----------------------------------------------------------------------
@@ -1033,211 +1403,14 @@ function drawBattery(dc) {
 			//dc.drawText(moonx+moonwidth/2,moony+moonwidth/2, fontLabel, moon.c_phase, Gfx.TEXT_JUSTIFY_CENTER);
 		} 	
 		
-
-
-      // Draw the numbers --------------------------------------------------------------------------------------
-       var NbrFont = (App.getApp().getProperty("Numbers")); 
-       targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
-       var font1 = 0;  
-       var rightNum="3";
-       var leftNum="9";
-       var twelveNum=0;
-       var iconDrop = 19;
-       //var twelveFont;
-       
-		if (App.getApp().getProperty("ConnectionIndicator") < 2){
-			//twelveNum=0;
-		} else {
-			if (Sys.getDeviceSettings().phoneConnected) {
-				if ((App.getApp().getProperty("ConnectionIndicator") % 2) == 0) {
-					twelveNum = ConnectedPhoneIcon;
-					targetDc.setColor((App.getApp().getProperty("ConnectedColor")), Gfx.COLOR_TRANSPARENT);
-				} else {
-					//twelveNum = 0;
-					//targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
-				}
-			} else {
-				if (App.getApp().getProperty("ConnectionIndicator") > 2) {
-					twelveNum= DisconnectedPhoneIcon;
-					targetDc.setColor((App.getApp().getProperty("DisconnectedColor")), Gfx.COLOR_TRANSPARENT);
-				} else {
-					//twelveNum= 0;
-					//targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
-				}
-			}
+	//Draw numbers
+		if (screenShape == RoundScreen) {  // round
+			DrawRoundScreenNumbers(targetDc);
 		}
-		
-       
-       
-       
-       if (App.getApp().getProperty("Reverse")) {
-       	rightNum="9";
-       	leftNum="3";
-       	}
-       
-       if (screenShape == RoundScreen) {  // round
-   		    if ( NbrFont == Fat12Numbers) { //fat 12 only
-	    		font1 = Ui.loadResource(Rez.Fonts.id_font_fat);
-	    		if (twelveNum == 0) {
-					targetDc.drawText((width / 2), 5, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
-				} else {
-					targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
-				}
-			
-	    	}            
-		    if ( NbrFont == FatNumbers) { //fat
-		    		font1 = Ui.loadResource(Rez.Fonts.id_font_fat);
-		    		if (twelveNum == 0) {
-						targetDc.drawText((width / 2), 5, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
-					} else {
-						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
-					}
-		    		targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
-	        		if (! MoonEnable) {
-		    			targetDc.drawText(width - 16, (height / 2) - 26, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
-	        		}
-	        		targetDc.drawText(width / 2, height - 54, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
-	        		targetDc.drawText(16, (height / 2) - 26, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
-		    	}
-		    if ( NbrFont == RaceNumbers) { //race
-		    		font1 = Ui.loadResource(Rez.Fonts.id_font_race);
-		    		if (twelveNum == 0) {
-						targetDc.drawText((width / 2), 5, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
-					} else {
-						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
-					}
-		    		targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
-	        		if (! MoonEnable) {	
-		    			targetDc.drawText(width - 16, (height / 2) - 26, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
-	        		}
-	        		targetDc.drawText(width / 2, height - 52, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
-	        		targetDc.drawText(16, (height / 2) - 26, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
-		    	}
-		    if ( NbrFont == ClassicNumbers) { //classic
-		    		font1 = Ui.loadResource(Rez.Fonts.id_font_classic);
-		    		if (twelveNum == 0) {
-						targetDc.drawText((width / 2), 15, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
-					} else {
-						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
-					}
-		    		targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
-	        		if (! MoonEnable) {	
-		    			targetDc.drawText(width - 16, (height / 2) - 18, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
-	        		}
-	        		targetDc.drawText(width / 2, height - 48, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
-	        		targetDc.drawText(16, (height / 2) - 18, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
-		    	}
-		   if ( NbrFont == RomanNumbers) {  //roman
-		    		font1 = Ui.loadResource(Rez.Fonts.id_font_roman);
-		    		if (twelveNum == 0) {
-						targetDc.drawText((width / 2), 7, font1, "}", Gfx.TEXT_JUSTIFY_CENTER);
-					} else {
-						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
-					}
-		    		targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
-	        		if (! MoonEnable) {	
-		    			targetDc.drawText(width - 16, (height / 2) - 22, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
-	        		}
-	        		targetDc.drawText(width / 2, height - 50, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
-	        		targetDc.drawText(16, (height / 2) - 22, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
-		   		}
-		   	if ( NbrFont == SimpleNumbers) {  //simple
-		   			if (twelveNum == 0) {
-						targetDc.drawText((width / 2), 10, Gfx.FONT_SYSTEM_LARGE, "12", Gfx.TEXT_JUSTIFY_CENTER);
-					} else {
-						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
-					}
-		    		targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
-	        		if (! MoonEnable) {
-		    			targetDc.drawText(width - 16, (height / 2) - 22, Gfx.FONT_SYSTEM_LARGE  , rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
-	        		}
-	        		targetDc.drawText(width / 2, height - 45, Gfx.FONT_SYSTEM_LARGE   , "6", Gfx.TEXT_JUSTIFY_CENTER);
-	        		targetDc.drawText(16, (height / 2) - 22, Gfx.FONT_SYSTEM_LARGE   , leftNum, Gfx.TEXT_JUSTIFY_LEFT);
-		   		}
-	   	}
-       
-       
-       if (screenShape == SemiRoundScreen) {  //semi round
-       		iconDrop = 2;
-   		    if ( NbrFont == Fat12Numbers) { //fat
-	    		font1 = Ui.loadResource(Rez.Fonts.id_font_fat);
-	    		if (twelveNum == 0) {
-					targetDc.drawText((width / 2), -12, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
-				} else {
-					targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
-				}
-		    }
-                  
-		    if ( NbrFont == FatNumbers) { //fat
-		    		font1 = Ui.loadResource(Rez.Fonts.id_font_fat);
-		    		if (twelveNum == 0) {
-						targetDc.drawText((width / 2), -12, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
-		    		} else {
-						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
-					}
-					targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
-	        		if (! MoonEnable) {	
-		    			targetDc.drawText(width - 16, (height / 2) - 26, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
-	        		}
-	        		targetDc.drawText(width / 2, height - 41, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
-	        		targetDc.drawText(16, (height / 2) - 26, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
-		    }
-		    if ( NbrFont == RaceNumbers) { //race
-		    		font1 = Ui.loadResource(Rez.Fonts.id_font_race);
-		    		if (twelveNum == 0) {
-						targetDc.drawText((width / 2), -12, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
-		    		} else {
-						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
-					}
-					targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
-	        		if (! MoonEnable) {		
-		    			targetDc.drawText(width - 16, (height / 2) - 26, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
-	        		}
-	        		targetDc.drawText(width / 2, height - 39, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
-	        		targetDc.drawText(16, (height / 2) - 26, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
-		    	}
-		    if ( NbrFont == ClassicNumbers) { //classic
-		    		font1 = Ui.loadResource(Rez.Fonts.id_font_classic);
-		    		if (twelveNum == 0) {
-						targetDc.drawText((width / 2), 0, font1, "12", Gfx.TEXT_JUSTIFY_CENTER);
-		    		} else {
-						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
-					}
-					targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
-	        		if (! MoonEnable) {		
-		    			targetDc.drawText(width - 16, (height / 2) - 18, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
-	        		}
-	        		targetDc.drawText(width / 2, height - 33, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
-	        		targetDc.drawText(16, (height / 2) - 18, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
-		    	}
-		   if ( NbrFont == RomanNumbers) {  //roman
-		    		font1 = Ui.loadResource(Rez.Fonts.id_font_roman);
-		    		if (twelveNum == 0) {
-						targetDc.drawText((width / 2), -4, font1, "}", Gfx.TEXT_JUSTIFY_CENTER);
-		    		} else {
-						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
-					}
-					targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
-	        		if (! MoonEnable) {		
-		    			targetDc.drawText(width - 16, (height / 2) - 22, font1, rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
-	        		}
-	        		targetDc.drawText(width / 2, height - 40, font1, "6", Gfx.TEXT_JUSTIFY_CENTER);
-	        		targetDc.drawText(16, (height / 2) - 22, font1, leftNum, Gfx.TEXT_JUSTIFY_LEFT);
-		   		}
-		   	if ( NbrFont == SimpleNumbers) {  //simple
-		    		if (twelveNum == 0) {
-						targetDc.drawText((width / 2), -3, Gfx.FONT_SYSTEM_LARGE   , "12", Gfx.TEXT_JUSTIFY_CENTER);
-		    		} else {
-						targetDc.drawText((width / 2), iconDrop, fontIcons, twelveNum, Gfx.TEXT_JUSTIFY_CENTER);
-					}
-					targetDc.setColor((App.getApp().getProperty("NumbersColor")), Gfx.COLOR_TRANSPARENT);
-	        		if (! MoonEnable) {		
-		    			targetDc.drawText(width - 16, (height / 2) - 17, Gfx.FONT_SYSTEM_LARGE  , rightNum, Gfx.TEXT_JUSTIFY_RIGHT);
-	        		}
-	        		targetDc.drawText(width / 2, height - 30, Gfx.FONT_SYSTEM_LARGE   , "6", Gfx.TEXT_JUSTIFY_CENTER);
-	        		targetDc.drawText(16, (height / 2) - 17, Gfx.FONT_SYSTEM_LARGE   , leftNum, Gfx.TEXT_JUSTIFY_LEFT);
-		   		}
-	   	} 
+		if (screenShape == SemiRoundScreen) {  //semi round
+			DrawSemiRoundScreenNumbers(targetDc);
+		}
+
        
   // Draw hands under a lot sorta out of order ------------------------------------         
     	if (App.getApp().getProperty("HandsBehind")) {
@@ -1258,7 +1431,8 @@ function drawBattery(dc) {
 		var SunmarkersEnable = (App.getApp().getProperty("SunMarkersEnable"));		
        	if (SunmarkersEnable && screenShape == RoundScreen) {
        		//Sys.println("sunmarkers "+ SunmarkersEnable);
-			extras.drawSunMarkers(targetDc);
+			//extras.drawSunMarkers(targetDc);
+			drawSunMarkers(targetDc);
 		}
 		
 
@@ -1569,8 +1743,8 @@ var setX = center_x;
             // allowed run the onPartialUpdate method to draw the second hand.
             //Sys.println("Entering onPartialUpdate");
             //but first, draw center arbor
-            targetDc.setColor(App.getApp().getProperty("SecHands1Color"), Graphics.COLOR_TRANSPARENT);
-            targetDc.fillCircle(width / 2, height / 2, 4);
+//            targetDc.setColor(App.getApp().getProperty("SecHands1Color"), Graphics.COLOR_TRANSPARENT);
+//            targetDc.fillCircle(width / 2, height / 2, 4);
             targetDc.setPenWidth(2);
             onPartialUpdate( dc );
         } else if ((isAwake) && (SecHandStyle > 0)){
@@ -1619,7 +1793,7 @@ Sys.println("");
 			screenCenterPoint = [width/2, height/2];			
 			//var secondHandPoints = generateHandCoordinates(center_x+r1*Math.sin(secondHand),center_y-r1*Math.cos(secondHand), center_x+r2*Math.sin(secondHand),center_y-r2*Math.cos(secondHand));
         
-         	var secondHandPoints = generateHandCoordinates(screenCenterPoint, secondHand, 100, 30, 3);
+         	var secondHandPoints = generateHandCoordinates(screenCenterPoint, secondHand, width/2 - (5 * App.getApp().getProperty("markslenth"))-5, 30, 3);
 
 
 

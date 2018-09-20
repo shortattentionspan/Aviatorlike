@@ -1,1 +1,10 @@
 project.manifest = manifest.xml
+
+round.excludeAnnotations = semirounddial
+#round-240x240.excludeAnnotations = semirounddial
+round-240x240.excludeAnnotations = round218dial
+#round-218x218.excludeAnnotations = semirounddial
+round-218x218.excludeAnnotations = round240dial
+semiround.excludeAnnotations = rounddial
+semiround.excludeAnnotations = round218dial
+semiround.excludeAnnotations = round240dial
